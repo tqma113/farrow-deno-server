@@ -2,7 +2,6 @@ import { Int, ObjectType, Type } from 'farrow-schema'
 import { Http, HttpPipelineOptions } from 'farrow-http'
 import { Api } from 'farrow-api'
 import { DenoService } from '../src/index'
-import { createApiClients } from 'farrow/dist/api-client'
 
 const createHttp = (options?: HttpPipelineOptions) => {
   return Http({

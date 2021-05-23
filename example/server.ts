@@ -1,7 +1,8 @@
-import request from 'supertest'
 import { Int, ObjectType, Type } from 'farrow-schema'
 import { Http, HttpPipelineOptions } from 'farrow-http'
 import { Api } from 'farrow-api'
+import { DenoService } from '../src/index'
+import { createApiClients } from 'farrow/dist/api-client'
 
 const createHttp = (options?: HttpPipelineOptions) => {
   return Http({
@@ -9,10 +10,6 @@ const createHttp = (options?: HttpPipelineOptions) => {
     ...options,
   })
 }
-
-
-let http = createHttp()
-let server = http.server()
 
 class CountState extends ObjectType {
   count = {
@@ -66,3 +63,16 @@ const entries = {
   setCount,
   triggerError,
 }
+
+const CounterService = DenoService({
+  entries,
+})
+const http = createHttp()
+const server = http.server()
+
+const PORT = 3000
+const path = `${__dirname}/client.ts`
+
+http.route('/counter').use(CounterService)
+
+http.listen(PORT)

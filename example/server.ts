@@ -28,7 +28,7 @@ const getCount = Api(
     return {
       count,
     }
-  },
+  }
 )
 
 const setCount = Api(
@@ -44,7 +44,7 @@ const setCount = Api(
   (input) => {
     count = input.newCount
     return getCount({})
-  },
+  }
 )
 
 const triggerError = Api(
@@ -54,7 +54,7 @@ const triggerError = Api(
   },
   () => {
     throw new Error('trigger error')
-  },
+  }
 )
 
 const entries = {

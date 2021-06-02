@@ -1,5 +1,14 @@
-import type { FormatEntries, FormatResult, FormatApi } from 'farrow-api/dist/toJSON'
-import { FormatFields, FormatType, FormatTypes, isNamedFormatType } from 'farrow-schema/formatter'
+import type {
+  FormatEntries,
+  FormatResult,
+  FormatApi,
+} from 'farrow-api/dist/toJSON'
+import {
+  FormatFields,
+  FormatType,
+  FormatTypes,
+  isNamedFormatType,
+} from 'farrow-schema/formatter'
 import type { CodegenOptions } from 'farrow-api/dist/codegen'
 
 export const isInlineType = (input: FormatType) => {
@@ -24,7 +33,10 @@ const transformComment = (text: string) => {
     .join('\n*\n* ')
 }
 
-const attachComment = (result: string, options: { [key: string]: string | undefined }) => {
+const attachComment = (
+  result: string,
+  options: { [key: string]: string | undefined }
+) => {
   let list = Object.entries(options)
     .map(([key, value]) => {
       return value ? `* @${key} ${transformComment(value.trim())}` : ''
@@ -64,7 +76,10 @@ const getFieldType = (typeId: number, types: FormatTypes): string => {
   }
 
   if (fieldType.type === 'Literal') {
-    let literal = typeof fieldType.value === 'string' ? `"${fieldType.value}"` : fieldType.value
+    let literal =
+      typeof fieldType.value === 'string'
+        ? `"${fieldType.value}"`
+        : fieldType.value
     return `${literal}`
   }
 
@@ -77,11 +92,15 @@ const getFieldType = (typeId: number, types: FormatTypes): string => {
   }
 
   if (fieldType.type === 'Union') {
-    return fieldType.itemTypes.map((itemType) => getFieldType(itemType.typeId, types)).join(' | ')
+    return fieldType.itemTypes
+      .map((itemType) => getFieldType(itemType.typeId, types))
+      .join(' | ')
   }
 
   if (fieldType.type === 'Intersect') {
-    return fieldType.itemTypes.map((itemType) => getFieldType(itemType.typeId, types)).join(' & ')
+    return fieldType.itemTypes
+      .map((itemType) => getFieldType(itemType.typeId, types))
+      .join(' & ')
   }
 
   if (fieldType.type === 'Struct') {
@@ -100,7 +119,9 @@ const getFieldType = (typeId: number, types: FormatTypes): string => {
   }
 
   if (fieldType.type === 'Tuple') {
-    return `[${fieldType.itemTypes.map((itemType) => getFieldType(itemType.typeId, types)).join(', ')}]`
+    return `[${fieldType.itemTypes
+      .map((itemType) => getFieldType(itemType.typeId, types))
+      .join(', ')}]`
   }
 
   throw new Error(`Unsupported field: ${JSON.stringify(fieldType, null, 2)}`)
@@ -124,7 +145,10 @@ const getFieldsType = (fields: FormatFields, types: FormatTypes): string[] => {
   })
 }
 
-export const codegen = (formatResult: FormatResult, options?: CodegenOptions): string => {
+export const codegen = (
+  formatResult: FormatResult,
+  options?: CodegenOptions
+): string => {
   let config = {
     emitApiClient: true,
     ...options,
@@ -142,7 +166,11 @@ export const codegen = (formatResult: FormatResult, options?: CodegenOptions): s
       let fields = getFieldsType(formatType.fields, formatResult.types)
 
       if (!typeName) {
-        throw new Error(`Empty name of Object/Struct, fields: {${Object.keys(formatType.fields)}}`)
+        throw new Error(
+          `Empty name of Object/Struct, fields: {${Object.keys(
+            formatType.fields
+          )}}`
+        )
       }
 
       if (exportSet.has(typeName)) {
@@ -201,11 +229,15 @@ export const codegen = (formatResult: FormatResult, options?: CodegenOptions): s
         `
     }
 
-    throw new Error(`Unsupported type of ${JSON.stringify(formatType, null, 2)}`)
+    throw new Error(
+      `Unsupported type of ${JSON.stringify(formatType, null, 2)}`
+    )
   }
 
   let handleTypes = (formatTypes: FormatTypes) => {
-    return Object.values(formatTypes).map((formatType) => handleType(formatType))
+    return Object.values(formatTypes).map((formatType) =>
+      handleType(formatType)
+    )
   }
 
   let handleApi = (api: FormatApi, path: string[]) => {
@@ -213,7 +245,7 @@ export const codegen = (formatResult: FormatResult, options?: CodegenOptions): s
     let outputType = getFieldType(api.output.typeId, formatResult.types)
     return `
       (input: ${inputType}) => invoke({ type: 'Single', path: ${JSON.stringify(
-      path,
+      path
     )}, input }) as Promise<${outputType}>
     `
   }

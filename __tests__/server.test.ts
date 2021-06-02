@@ -30,7 +30,7 @@ const getCount = Api(
     return {
       count,
     }
-  },
+  }
 )
 
 const setCount = Api(
@@ -46,7 +46,7 @@ const setCount = Api(
   (input) => {
     count = input.newCount
     return getCount({})
-  },
+  }
 )
 
 const triggerError = Api(
@@ -56,7 +56,7 @@ const triggerError = Api(
   },
   () => {
     throw new Error('trigger error')
-  },
+  }
 )
 
 const entries = {
@@ -79,10 +79,8 @@ describe('deno-server', () => {
 
     const source = fs.readFileSync(`${__dirname}/client.ts`, 'utf-8')
 
-    const test = await agent(server)
-      .get('/counter/client.ts')
-      .send()
-    
+    const test = await agent(server).get('/counter/client.ts').send()
+
     server.close()
 
     expect(JSON.stringify(test.text)).toBe(JSON.stringify(source))

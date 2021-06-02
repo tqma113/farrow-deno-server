@@ -6,7 +6,6 @@ import { format } from 'farrow-api/dist/prettier'
 import { ApiService } from 'farrow-api-server'
 import { codegen } from './codegen'
 
-
 export type CreateDenoServiceOptions = {
   entries: ApiEntries
   namesapce?: string

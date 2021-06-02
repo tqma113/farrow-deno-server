@@ -1,6 +1,6 @@
 {
   "name": "farrow-deno-server",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "./dist/index.js",
   "repository": "https://github.com/tqma113/farrow-deno-server.git",
   "author": "Ma Tianqi <mtq1997@126.com>",

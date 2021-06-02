@@ -1,9 +1,9 @@
 {
   "name": "farrow-deno-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "repository": "https://github.com/tqma113/farrow-deno-server.git",
-  "author": "matianqi.tqma <matianqi.tqma@bytedance.com>",
+  "author": "Ma Tianqi <mtq1997@126.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.23",
@@ -31,8 +31,8 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "tsc --build tsconfig.build.json",
     "run:server": "ts-node ./example/server.ts",
-    "run:client": "deno run ./example/client.ts"
+    "run:client": "deno run -r --allow-net ./example/client.ts"
   }
 }

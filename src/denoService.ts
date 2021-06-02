@@ -1,35 +1,11 @@
-import { Response, RouterPipeline } from 'farrow-http'
-import {
-  List,
-  Struct,
-  Any,
-} from 'farrow-schema'
+import { Response, RouterPipeline, useReq } from 'farrow-http'
 import { ApiEntries } from 'farrow-api'
 import { toJSON } from 'farrow-api/dist/toJSON'
-import { codegen, CodegenOptions } from 'farrow-api/dist/codegen'
+import { CodegenOptions } from 'farrow-api/dist/codegen'
 import { format } from 'farrow-api/dist/prettier'
-import {
-  createSchemaValidator,
-  ValidationError,
-} from 'farrow-schema/validator'
 import { ApiService } from 'farrow-api-server'
+import { codegen } from './codegen'
 
-const BodySchema = Struct({
-  path: List(String),
-  input: Any,
-})
-
-const validateBody = createSchemaValidator(BodySchema)
-
-const getErrorMessage = (error: ValidationError) => {
-  let { message } = error
-
-  if (Array.isArray(error.path) && error.path.length > 0) {
-    message = `path: ${JSON.stringify(error.path)}\n${message}`
-  }
-
-  return message
-}
 
 export type CreateDenoServiceOptions = {
   entries: ApiEntries
@@ -55,10 +31,12 @@ export const createDenoService = (
   const service = ApiService({ entries })
 
   service.route(path).use(() => {
+    const req = useReq()
     const formatResult = toJSON(entries)
+    const url = `http://${req.headers.host}${req.url}`.replace(path, '')
     let source = codegen(formatResult, {
       ...options.codegen,
-      url: path,
+      url,
     })
 
     if (options.transform) {

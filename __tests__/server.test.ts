@@ -1,10 +1,9 @@
 import fs from 'fs'
-import request from 'supertest'
+import { agent } from 'supertest'
 import { Int, ObjectType, Type } from 'farrow-schema'
 import { Http, HttpPipelineOptions } from 'farrow-http'
 import { Api } from 'farrow-api'
 import { DenoService } from '../src/index'
-import { createApiClients } from 'farrow/dist/api-client'
 
 const createHttp = (options?: HttpPipelineOptions) => {
   return Http({
@@ -73,31 +72,19 @@ const CounterService = DenoService({
 describe('deno-server', () => {
   it('client in server services', async () => {
     const http = createHttp()
-    const server = http.server()
-
-    const PORT = 3000
-    const path = `${__dirname}/client.ts`
 
     http.route('/counter').use(CounterService)
 
-    http.listen(PORT)
+    const server = http.listen(3000)
 
-    const client = createApiClients({
-      services: [
-        {
-          src: `http://localhost:${PORT}/counter`,
-          dist: path,
-          alias: '/api',
-        },
-      ],
-    })
-  
-    await client.sync()
+    const source = fs.readFileSync(`${__dirname}/client.ts`, 'utf-8')
 
-    const source = fs.readFileSync(path, 'utf-8')
-
-    await request(server)
+    const test = await agent(server)
       .get('/counter/client.ts')
       .send()
+    
+    server.close()
+
+    expect(JSON.stringify(test.text)).toBe(JSON.stringify(source))
   })
 })

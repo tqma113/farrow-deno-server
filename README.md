@@ -1,9 +1,8 @@
 # farrow-deno-server
 
-[![NPM](https://img.shields.io/npm/v/farrow-deno-server.svg)](https://www.npmjs.com/package/farrow-deno-server)
-[![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://github.com/tqma113/farrow-deno-server#readme)
-[![Action Status](https://github.com/tqma113/farrow-deno-server/workflows/Test/badge.svg)](https://github.com/tqma113/farrow-deno-server/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/tqma/farrow-deno-server/blob/master/LICENSE)
+Unpublished!
+
+Move to [farrow-deno-api](https://github.com/Lucifier129/farrow/tree/master/packages/farrow-deno-api)
 
 A deno server middleware for [farrow-http](https://github.com/Lucifier129/farrow).
 
